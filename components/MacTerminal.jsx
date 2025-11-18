@@ -1,6 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useTheme } from "../app/ThemeProvider";
+import { commands } from "../lib/commands";
+
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function MacTerminal() {
   const [rows, setRows] = useState([]);
@@ -9,71 +12,111 @@ export default function MacTerminal() {
   const terminalRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  // === WELCOME ASCII ===
+  // === ASCII Header ===
   const welcomeText = String.raw`
   _   _ _   ___ _                _       _                         _                  _     
  | | | (_) |_ _( )_ __ ___      / \   __| |_ __   __ _ _ __       | | __ _ _ ____   _(_)___ 
  | |_| | |  | ||/| '_ \` _ \   / _ \ / _\`| '_ \ / _\`| '_ \   _  | |/ _\`| '__\ \ / / / __|
  |  _  | |  | |  | | | | | |  / ___ \ (_| | | | | (_| | | | | | |_| | (_| | |   \ V /| \__ \ 
  |_| |_|_| |___| |_| |_| |_| /_/   \_\__,_|_| |_|\__,_|_| |_|  \___/ \__,_|_|    \_/ |_|___/
-                                                                                             `;
+                                                                                                                                                              
+  `;
 
-  const tipsText =
-    "Tip: type -help to see available commands";
+  const tipsText = "Tip: type 'help' to see available commands";
 
-  // == Inject ASCII + tips on load ==
+  // === INITIAL RENDER ===
   useEffect(() => {
     setRows([
       { type: "ascii", username: "", content: welcomeText },
       { type: "tip", username: "", content: tipsText },
     ]);
 
-    // delay enabling auto-scroll
     setTimeout(() => setFirstRender(false), 300);
   }, []);
 
   // === AUTO SCROLL ===
   useEffect(() => {
     if (firstRender) return;
-
     terminalRef.current?.scrollTo({
       top: terminalRef.current.scrollHeight,
       behavior: "smooth",
     });
   }, [rows, firstRender]);
 
-  // === HANDLE SUBMIT ===
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  // === COMMAND HANDLER ===
+  const executeCommand = async (text) => {
+    const cmd = text.trim();
 
-    // push user row
-    setRows((prev) => [
-      ...prev,
-      {
-        type: "user",
-        username: "user:~$",
-        content: input,
-      },
-    ]);
+    // === CHECK LOCAL COMMANDS FIRST ===
+    if (commands[cmd]) {
+      const result = commands[cmd]();
 
-    // call backend
+      if (result === "__CLEAR__") {
+        setRows([]);
+        return;
+      }
+
+      // directly print result (no typing)
+      setRows((prev) => [
+        ...prev,
+        {
+          type: "adnanai",
+          username: "adnan@jarvis:~$",
+          content: result,
+        },
+      ]);
+
+      return;
+    }
+
+    // === FETCH AI RESPONSE ===
     const res = await fetch("/api/chat", {
       method: "POST",
-      body: JSON.stringify({ message: input }),
+      body: JSON.stringify({ message: text }),
     });
 
     const data = await res.json();
+    const fullText = data.reply;
 
-    // push ai row
+    // === PREPARE EMPTY ROW FOR TYPING ===
+    const aiRowIndex = rows.length + 1; 
+
     setRows((prev) => [
       ...prev,
       {
         type: "adnanai",
         username: "adnan@jarvis:~$",
-        content: data.reply,
+        content: "",     // start empty
       },
     ]);
+
+    // === TYPING ANIMATION ===
+    const chars = fullText.split("");
+
+    for (let i = 0; i < chars.length; i++) {
+      await wait(8); // speed: lower => faster typing
+
+      setRows((prev) => {
+        const updated = [...prev];
+        updated[aiRowIndex].content = fullText.slice(0, i + 1);
+        return updated;
+      });
+    }
+  };
+
+
+  // === SUBMIT INPUT ===
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    // user row
+    setRows((prev) => [
+      ...prev,
+      { type: "user", username: "user:~$", content: input },
+    ]);
+
+    await executeCommand(input);
 
     setInput("");
   };
@@ -101,7 +144,6 @@ export default function MacTerminal() {
 
         {/* BODY */}
         <div ref={terminalRef} className="body">
-
           {rows.map((row, i) => (
             <div className="body__row" key={i}>
               {row.username ? (
@@ -114,10 +156,9 @@ export default function MacTerminal() {
               )}
             </div>
           ))}
-
         </div>
 
-        {/* INPUT BAR */}
+        {/* INPUT */}
         <form onSubmit={handleSubmit} className="command-bar">
           <span className="body__row-folder">user:~$</span>
 
