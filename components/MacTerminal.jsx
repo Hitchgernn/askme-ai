@@ -78,31 +78,18 @@ export default function MacTerminal() {
           {/* LOOP ALL ROWS */}
           {rows.map((row, i) => (
             <div key={i} className="body__row">
-              {/* Arrow */}
-              <span className="body__row-arrow"></span>
-
-              {/* username */}
-              <span className="body__row-folder">
-                {row.username}
-              </span>
-
-              {/* colon */}
-              <span className="body__row-colon">&nbsp;:&nbsp;</span>
-
-              {/* content */}
-              <span className="body__row-result">
-                {row.content}
-              </span>
+              <div className="prompt-info">
+                <span className="body__row-folder">{row.username}</span>
+              </div>
+              <span className="body__row-result">{row.content}</span>
             </div>
           ))}
         </div>
 
         {/* INPUT LINE */}
         <form onSubmit={handleSubmit} className="command-bar">
-          <span className="body__row-arrow"></span>
 
           <span className="body__row-folder">user$</span>
-          <span className="body__row-colon">&nbsp;:&nbsp;</span>
 
           <div className="input-wrapper">
             <input

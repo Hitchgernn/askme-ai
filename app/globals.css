@@ -26,7 +26,6 @@
   /* TEXT COLORS */
   --input-color: #fff;
   --folder-color: #56f2e6;
-  --arrow-color: #40e800;
   --colon-color: #fff;
   --cursor-color: #bb6bd9;
 }
@@ -42,7 +41,6 @@
 
   --input-color: #000;
   --folder-color: #1ea300;
-  --arrow-color: #00a300;
   --colon-color: #000;
   --cursor-color: #000;
 }
@@ -151,20 +149,17 @@ body {
 ============================================================ */
 .body__row {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align to top for multiline */
   padding: 0 2rem;
   margin-top: 1.3rem;
   line-height: 1.7rem;
 }
 
-/* green > arrow */
-.body__row-arrow {
-  width: .8rem;
-  height: .6rem;
-  background-color: var(--arrow-color);
-  clip-path: polygon(0% 30%, 60% 30%, 60% 0%, 100% 50%, 60% 100%, 60% 70%, 0% 70%);
-  margin-right: .9rem;
+.prompt-info {
+  display: flex;
+  white-space: nowrap; /* Prevent prompt from wrapping */
 }
+
 
 /* blue folder (username) */
 .body__row-folder {
@@ -175,10 +170,8 @@ body {
 /* result text */
 .body__row-result {
   margin-left: 1rem;
-}
-
-.body__row-colon {
-  color: var(--colon-color);
+  word-break: break-word;
+  flex: 1;
 }
 
 /* ============================================================
