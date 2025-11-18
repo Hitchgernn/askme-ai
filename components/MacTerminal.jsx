@@ -95,26 +95,25 @@ export default function MacTerminal() {
               </span>
             </div>
           ))}
-
-          {/* INPUT LINE */}
-          <form onSubmit={handleSubmit} className="body__row" style={{ display: "flex" }}>
-            <span className="body__row-arrow"></span>
-
-            <span className="body__row-folder">user$</span>
-            <span className="body__row-colon">&nbsp;:&nbsp;</span>
-
-            <div className="input-wrapper">
-              <input
-                autoFocus
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="terminal-input"
-              />
-            </div>
-
-          </form>
-
         </div>
+
+        {/* INPUT LINE */}
+        <form onSubmit={handleSubmit} className="command-bar">
+          <span className="body__row-arrow"></span>
+
+          <span className="body__row-folder">user$</span>
+          <span className="body__row-colon">&nbsp;:&nbsp;</span>
+
+          <div className="input-wrapper">
+            <input
+              autoFocus
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="terminal-input"
+            />
+          </div>
+        </form>
+
       </div>
     </div>
   );
