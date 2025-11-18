@@ -1,38 +1,33 @@
 /* ============================================================
-   FONTS — MUST BE FIRST
+   GOOGLE FONT
 ============================================================ */
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap");
 
 /* ============================================================
-   TAILWIND v4
+   TAILWIND
 ============================================================ */
 @import "tailwindcss";
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
 /* ============================================================
-   GLOBAL CSS VARIABLES (DARK THEME DEFAULT)
+   THEME VARIABLES
 ============================================================ */
 :root {
-  /* PAGE BACKGROUND */
-  --background: #212121;
+  --background: #404040;
   --foreground: #ededed;
 
-  /* TERMINAL ELEMENTS */
   --terminal-bg: #000;
   --header-border: rgba(255, 255, 255, 0.3);
   --header-title: #fff;
 
-  /* TEXT COLORS */
   --input-color: #fff;
-  --folder-color: #56f2e6;
-  --colon-color: #fff;
-  --cursor-color: #bb6bd9;
+  --folder-color: #27d900;
+  --cursor-color: #ffffff;
 }
 
-/* LIGHT THEME */
 [data-theme="light"] {
-  --background: #ffffff;
+  --background: #404040;
   --foreground: #171717;
 
   --terminal-bg: #f4f4f4;
@@ -40,13 +35,12 @@
   --header-title: #000;
 
   --input-color: #000;
-  --folder-color: #1ea300;
-  --colon-color: #000;
+  --folder-color: #198a00;
   --cursor-color: #000;
 }
 
 /* ============================================================
-   GLOBAL RESETS
+   GLOBAL RESET
 ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -56,62 +50,54 @@ html {
   font-size: 62.5%;
 }
 
-/* ============================================================
-   BODY STYLING (FINAL WINNER)
-============================================================ */
 body {
   margin: 0;
-  font-family: 'JetBrains Mono', monospace;
-  background-color: var(--background) !important;
+  background-color: var(--background);
   color: var(--foreground);
+  font-family: 'JetBrains Mono', monospace;
 }
 
 /* ============================================================
-   PAGE LAYOUT
+   LAYOUT / TERMINAL CONTAINER
 ============================================================ */
 .container {
   padding: 2.5rem 2rem;
 }
 
-/* ============================================================
-   TERMINAL CONTAINER
-============================================================ */
 .mac-terminal {
   background-color: var(--terminal-bg);
-  border-radius: 5px;
-  width: 70rem;
-  height: 50rem;
+  width: 90rem;
+  height: 60rem;
   margin: 0 auto;
-  overflow: hidden;
+  border-radius: 6px;
+
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ============================================================
-   HEADER (TRAFFIC LIGHT)
+   HEADER (TRAFFIC LIGHTS)
 ============================================================ */
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   height: 4rem;
-  border-bottom: 1px solid var(--header-border);
   padding: 0 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid var(--header-border);
 }
 
 .header__op {
   display: flex;
-  align-items: center;
+  gap: .7rem;
 }
 
 .header__op-icon {
   width: 1.4rem;
   height: 1.4rem;
   border-radius: 50%;
-}
-
-.header__op-icon:not(:last-child) {
-  margin-right: .7rem;
 }
 
 .header__op-icon--red {
@@ -130,85 +116,106 @@ body {
 }
 
 .header__title {
-  font-family: 'Open Sans', sans-serif;
   font-size: 1.2rem;
+  font-family: 'Open Sans', sans-serif;
   color: var(--header-title);
 }
 
 /* ============================================================
-   BODY (SCROLLING LOGS)
+   TERMINAL BODY
 ============================================================ */
 .body {
   flex: 1;
-  font-size: 1.3rem;
   overflow-y: auto;
+  font-size: 1.3rem;
 }
 
 /* ============================================================
-   TERMINAL ROWS
+   TERMINAL ROWS (THE FIX)
 ============================================================ */
 .body__row {
-  display: flex;
-  align-items: flex-start; /* Align to top for multiline */
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  align-items: start !important;
+  gap: 1rem !important;
   padding: 0 2rem;
   margin-top: 1.3rem;
-  line-height: 1.7rem;
 }
 
 .prompt-info {
-  display: flex;
-  white-space: nowrap; /* Prevent prompt from wrapping */
+  white-space: nowrap !important;
+  color: var(--folder-color);
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
+.body__row-result {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  display: block !important;
+  flex: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-/* blue folder (username) */
+/* username (green) */
 .body__row-folder {
   color: var(--folder-color);
-  margin-right: 1rem;
-}
-
-/* result text */
-.body__row-result {
-  margin-left: 1rem;
-  word-break: break-word;
-  flex: 1;
 }
 
 /* ============================================================
-   COMMAND BAR (INPUT)
+   COMMAND BAR
 ============================================================ */
 .command-bar {
   display: flex;
   align-items: center;
-  padding: 0 2rem;
+
   height: 4rem;
-  border-top: 1px solid var(--header-border);
   line-height: 1.7rem;
   font-size: 1.3rem;
+
+  padding: 0 2rem;
+  border-top: 1px solid var(--header-border);
 }
 
-/* ============================================================
-   INPUT SECTION
-============================================================ */
+/* input wrapper */
 .input-wrapper {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
+/* terminal input */
 .terminal-input {
   width: 100%;
   background: transparent;
   border: none;
   outline: none;
-  color: var(--input-color);
   font-family: inherit;
   font-size: inherit;
+  color: var(--input-color);
   caret-color: var(--cursor-color);
 }
 
-/* FLASHING CURSOR (IF YOU STILL USE IT) */
-@keyframes flash {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+.body__row {
+  padding: 0 2rem;
+  margin-top: 1.3rem;
+}
+
+.prompt-line {
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: block;
+}
+
+.prompt-username {
+  color: var(--folder-color);
+  white-space: nowrap;
+}
+
+.command-bar .terminal-input {
+  margin-left: 1rem;
 }

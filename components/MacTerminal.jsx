@@ -25,7 +25,7 @@ export default function MacTerminal() {
       ...prev,
       {
         type: "user",
-        username: "user$",
+        username: "user:~$",
         content: input
       }
     ]);
@@ -43,7 +43,7 @@ export default function MacTerminal() {
       ...prev,
       {
         type: "adnanai",
-        username: "adnan@ai$",
+        username: "adnan@ai:~$",
         content: data.reply
       }
     ]);
@@ -76,20 +76,23 @@ export default function MacTerminal() {
         <div ref={terminalRef} className="body">
 
           {/* LOOP ALL ROWS */}
-          {rows.map((row, i) => (
-            <div key={i} className="body__row">
-              <div className="prompt-info">
-                <span className="body__row-folder">{row.username}</span>
-              </div>
-              <span className="body__row-result">{row.content}</span>
-            </div>
-          ))}
+        {rows.map((row, i) => (
+          <div className="body__row" key={i}>
+            <span className="prompt-line">
+              <span className="prompt-username">{row.username}</span> {row.content}
+            </span>
+          </div>
+        ))}
+
+
+
+
         </div>
 
         {/* INPUT LINE */}
         <form onSubmit={handleSubmit} className="command-bar">
 
-          <span className="body__row-folder">user$</span>
+          <span className="body__row-folder">user:~$</span>
 
           <div className="input-wrapper">
             <input
