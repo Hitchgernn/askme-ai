@@ -17,7 +17,7 @@
   --background: #404040;
   --foreground: #ededed;
 
-  --terminal-bg: #000;
+  --terminal-bg: #171717;
   --header-border: rgba(255, 255, 255, 0.3);
   --header-title: #fff;
 
@@ -66,7 +66,7 @@ body {
 
 .mac-terminal {
   background-color: var(--terminal-bg);
-  width: 90rem;
+  width: 100rem;
   height: 60rem;
   margin: 0 auto;
   border-radius: 6px;

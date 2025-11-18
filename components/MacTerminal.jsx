@@ -5,32 +5,59 @@ import { useTheme } from "../app/ThemeProvider";
 export default function MacTerminal() {
   const [rows, setRows] = useState([]);
   const [input, setInput] = useState("");
+  const [firstRender, setFirstRender] = useState(true);
   const terminalRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  // Auto scroll
+  // === WELCOME ASCII ===
+  const welcomeText = String.raw`
+  _   _ _   ___ _                _       _                         _                  _     
+ | | | (_) |_ _( )_ __ ___      / \   __| |_ __   __ _ _ __       | | __ _ _ ____   _(_)___ 
+ | |_| | |  | ||/| '_ \` _ \   / _ \ / _\`| '_ \ / _\`| '_ \   _  | |/ _\`| '__\ \ / / / __|
+ |  _  | |  | |  | | | | | |  / ___ \ (_| | | | | (_| | | | | | |_| | (_| | |   \ V /| \__ \ 
+ |_| |_|_| |___| |_| |_| |_| /_/   \_\__,_|_| |_|\__,_|_| |_|  \___/ \__,_|_|    \_/ |_|___/
+                                                                                             `;
+
+  const tipsText =
+    "Tip: type -help to see available commands";
+
+  // == Inject ASCII + tips on load ==
   useEffect(() => {
+    setRows([
+      { type: "ascii", username: "", content: welcomeText },
+      { type: "tip", username: "", content: tipsText },
+    ]);
+
+    // delay enabling auto-scroll
+    setTimeout(() => setFirstRender(false), 300);
+  }, []);
+
+  // === AUTO SCROLL ===
+  useEffect(() => {
+    if (firstRender) return;
+
     terminalRef.current?.scrollTo({
       top: terminalRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [rows]);
+  }, [rows, firstRender]);
 
+  // === HANDLE SUBMIT ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // USER COMMAND ROW
+    // push user row
     setRows((prev) => [
       ...prev,
       {
         type: "user",
         username: "user:~$",
-        content: input
-      }
+        content: input,
+      },
     ]);
 
-    // Fetch AI result
+    // call backend
     const res = await fetch("/api/chat", {
       method: "POST",
       body: JSON.stringify({ message: input }),
@@ -38,14 +65,14 @@ export default function MacTerminal() {
 
     const data = await res.json();
 
-    // AI RESPONSE ROW
+    // push ai row
     setRows((prev) => [
       ...prev,
       {
         type: "adnanai",
-        username: "adnan@ai:~$",
-        content: data.reply
-      }
+        username: "adnan@jarvis:~$",
+        content: data.reply,
+      },
     ]);
 
     setInput("");
@@ -64,34 +91,34 @@ export default function MacTerminal() {
           </div>
 
           <div className="header__title">
-            root@dekstop:~/askhitchgernn
+            root@desktop:~/askhitchgernn
           </div>
 
           <button onClick={toggleTheme} className="theme-toggle">
-            {theme === 'light' ? 'Dark' : 'Light'} Mode
+            {theme === "light" ? "Dark" : "Light"} Mode
           </button>
         </div>
 
         {/* BODY */}
         <div ref={terminalRef} className="body">
 
-          {/* LOOP ALL ROWS */}
-        {rows.map((row, i) => (
-          <div className="body__row" key={i}>
-            <span className="prompt-line">
-              <span className="prompt-username">{row.username}</span> {row.content}
-            </span>
-          </div>
-        ))}
-
-
-
+          {rows.map((row, i) => (
+            <div className="body__row" key={i}>
+              {row.username ? (
+                <span className="prompt-line">
+                  <span className="prompt-username">{row.username}</span>{" "}
+                  {row.content}
+                </span>
+              ) : (
+                <pre className="body__row-result">{row.content}</pre>
+              )}
+            </div>
+          ))}
 
         </div>
 
-        {/* INPUT LINE */}
+        {/* INPUT BAR */}
         <form onSubmit={handleSubmit} className="command-bar">
-
           <span className="body__row-folder">user:~$</span>
 
           <div className="input-wrapper">
