@@ -1,0 +1,121 @@
+"use client";
+import { useState, useRef, useEffect } from "react";
+import { useTheme } from "../app/ThemeProvider";
+
+export default function MacTerminal() {
+  const [rows, setRows] = useState([]);
+  const [input, setInput] = useState("");
+  const terminalRef = useRef(null);
+  const { theme, toggleTheme } = useTheme();
+
+  // Auto scroll
+  useEffect(() => {
+    terminalRef.current?.scrollTo({
+      top: terminalRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [rows]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    // USER COMMAND ROW
+    setRows((prev) => [
+      ...prev,
+      {
+        type: "user",
+        username: "user$",
+        content: input
+      }
+    ]);
+
+    // Fetch AI result
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: input }),
+    });
+
+    const data = await res.json();
+
+    // AI RESPONSE ROW
+    setRows((prev) => [
+      ...prev,
+      {
+        type: "adnanai",
+        username: "adnan@ai$",
+        content: data.reply
+      }
+    ]);
+
+    setInput("");
+  };
+
+  return (
+    <div className="container">
+      <div className="mac-terminal">
+        
+        {/* HEADER */}
+        <div className="header">
+          <div className="header__op">
+            <span className="header__op-icon header__op-icon--red"></span>
+            <span className="header__op-icon header__op-icon--yellow"></span>
+            <span className="header__op-icon header__op-icon--green"></span>
+          </div>
+
+          <div className="header__title">
+            root@dekstop:~/askhitchgernn
+          </div>
+
+          <button onClick={toggleTheme} className="theme-toggle">
+            {theme === 'light' ? 'Dark' : 'Light'} Mode
+          </button>
+        </div>
+
+        {/* BODY */}
+        <div ref={terminalRef} className="body">
+
+          {/* LOOP ALL ROWS */}
+          {rows.map((row, i) => (
+            <div key={i} className="body__row">
+              {/* Arrow */}
+              <span className="body__row-arrow"></span>
+
+              {/* username */}
+              <span className="body__row-folder">
+                {row.username}
+              </span>
+
+              {/* colon */}
+              <span className="body__row-colon">&nbsp;:&nbsp;</span>
+
+              {/* content */}
+              <span className="body__row-result">
+                {row.content}
+              </span>
+            </div>
+          ))}
+
+          {/* INPUT LINE */}
+          <form onSubmit={handleSubmit} className="body__row" style={{ display: "flex" }}>
+            <span className="body__row-arrow"></span>
+
+            <span className="body__row-folder">user$</span>
+            <span className="body__row-colon">&nbsp;:&nbsp;</span>
+
+            <div className="input-wrapper">
+              <input
+                autoFocus
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="terminal-input"
+              />
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  );
+}

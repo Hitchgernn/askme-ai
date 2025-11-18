@@ -1,0 +1,208 @@
+/* ============================================================
+   FONTS — MUST BE FIRST
+============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap");
+
+/* ============================================================
+   TAILWIND v4
+============================================================ */
+@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+/* ============================================================
+   GLOBAL CSS VARIABLES (DARK THEME DEFAULT)
+============================================================ */
+:root {
+  /* PAGE BACKGROUND */
+  --background: #212121;
+  --foreground: #ededed;
+
+  /* TERMINAL ELEMENTS */
+  --terminal-bg: #000;
+  --header-border: rgba(255, 255, 255, 0.3);
+  --header-title: #fff;
+
+  /* TEXT COLORS */
+  --input-color: #fff;
+  --folder-color: #56f2e6;
+  --arrow-color: #40e800;
+  --colon-color: #fff;
+  --cursor-color: #bb6bd9;
+}
+
+/* LIGHT THEME */
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --terminal-bg: #f4f4f4;
+  --header-border: rgba(0, 0, 0, 0.1);
+  --header-title: #000;
+
+  --input-color: #000;
+  --folder-color: #1ea300;
+  --arrow-color: #00a300;
+  --colon-color: #000;
+  --cursor-color: #000;
+}
+
+/* ============================================================
+   GLOBAL RESETS
+============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+/* ============================================================
+   BODY STYLING (FINAL WINNER)
+============================================================ */
+body {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  background-color: var(--background) !important;
+  color: var(--foreground);
+}
+
+/* ============================================================
+   PAGE LAYOUT
+============================================================ */
+.container {
+  padding: 2.5rem 2rem;
+}
+
+/* ============================================================
+   TERMINAL CONTAINER
+============================================================ */
+.mac-terminal {
+  background-color: var(--terminal-bg);
+  border-radius: 5px;
+  width: 70rem;
+  height: 50rem;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   HEADER (TRAFFIC LIGHT)
+============================================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  border-bottom: 1px solid var(--header-border);
+  padding: 0 1.4rem;
+}
+
+.header__op {
+  display: flex;
+  align-items: center;
+}
+
+.header__op-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+}
+
+.header__op-icon:not(:last-child) {
+  margin-right: .7rem;
+}
+
+.header__op-icon--red {
+  background-color: #FF544D;
+  border: 1px solid #DA3C37;
+}
+
+.header__op-icon--yellow {
+  background-color: #FFB429;
+  border: 1px solid #F0A318;
+}
+
+.header__op-icon--green {
+  background-color: #25C63A;
+  border: 1px solid #12A025;
+}
+
+.header__title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2rem;
+  color: var(--header-title);
+}
+
+/* ============================================================
+   BODY (SCROLLING LOGS)
+============================================================ */
+.body {
+  flex: 1;
+  font-size: 1.3rem;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   TERMINAL ROWS
+============================================================ */
+.body__row {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  margin-top: 1.3rem;
+  line-height: 1.7rem;
+}
+
+/* green > arrow */
+.body__row-arrow {
+  width: .8rem;
+  height: .6rem;
+  background-color: var(--arrow-color);
+  clip-path: polygon(0% 30%, 60% 30%, 60% 0%, 100% 50%, 60% 100%, 60% 70%, 0% 70%);
+  margin-right: .9rem;
+}
+
+/* blue folder (username) */
+.body__row-folder {
+  color: var(--folder-color);
+  margin-right: 1rem;
+}
+
+/* result text */
+.body__row-result {
+  margin-left: 1rem;
+}
+
+.body__row-colon {
+  color: var(--colon-color);
+}
+
+/* ============================================================
+   INPUT SECTION
+============================================================ */
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.terminal-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--input-color);
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: var(--cursor-color);
+}
+
+/* FLASHING CURSOR (IF YOU STILL USE IT) */
+@keyframes flash {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
