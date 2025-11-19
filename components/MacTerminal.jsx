@@ -12,7 +12,6 @@ export default function MacTerminal() {
   const terminalRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  // === ASCII Header ===
   const welcomeText = String.raw`
   _   _ _   ___ _                _       _                         _                  _     
  | | | (_) |_ _( )_ __ ___      / \   __| |_ __   __ _ _ __       | | __ _ _ ____   _(_)___ 
@@ -21,14 +20,16 @@ export default function MacTerminal() {
  |_| |_|_| |___| |_| |_| |_| /_/   \_\__,_|_| |_|\__,_|_| |_|  \___/ \__,_|_|    \_/ |_|___/
                                                                                                                                                               
   `;
+  const tips = "Tips:"
+  const tipsText1 = "* Type 'help' to see available basic commands";
+  const tipsText2 = "* Or type ur questions directly (english better)"
 
-  const tipsText = "Tip: type 'help' to see available basic commands";
-
-  // === INITIAL RENDER ===
   useEffect(() => {
     setRows([
       { type: "ascii", username: "", content: welcomeText },
-      { type: "tip", username: "", content: tipsText },
+      { type: "tip", username: "", content: tips },
+      { type: "tip", username: "", content: tipsText1}, 
+      { type: "tip", username: "", content: tipsText2},
     ]);
 
     setTimeout(() => setFirstRender(false), 300);
