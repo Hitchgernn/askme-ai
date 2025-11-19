@@ -22,7 +22,7 @@ export default function MacTerminal() {
                                                                                                                                                               
   `;
 
-  const tipsText = "Tip: type 'help' to see available commands";
+  const tipsText = "Tip: type 'help' to see available basic commands";
 
   // === INITIAL RENDER ===
   useEffect(() => {

@@ -1,11 +1,14 @@
-Nama lengkap: Adnan Abdul Majid
+Name: Adnan Abdul Majid
 Gender: Cowok
 Asal: Magelang, Indonesia
 Kuliah: Teknik Informasi UGM
 Instagram: @hitchgernn
-Mulai coding dari kelas 10 SMA
 Bahasa pertama: C++
 Fokus saat ini: Backend, Machine Learning, AI Agent Development
-Lagu Favorit: Best Part
-Artist Favorit: Daniel Caesar
+Programming Languages: C++, Python, Java Script
+Fav Songs: Best Part, Toronto 2014, You (LANY)
+Fav Artists: Daniel Caesar, Chase Atlantic, Joji, LANY
+Fav Animes: Sword Art Online 
+Fav Mangas: Jujustsu Kaisen, One Punc Man
 Hobi: Hobinya mencari Hobi
+Mulai coding dari kelas 10 SMA
