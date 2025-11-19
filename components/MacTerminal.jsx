@@ -110,15 +110,16 @@ export default function MacTerminal() {
     e.preventDefault();
     if (!input.trim()) return;
 
+    const currentInput = input;
+    setInput("");
+
     // user row
     setRows((prev) => [
       ...prev,
-      { type: "user", username: "user:~$", content: input },
+      { type: "user", username: "user:~$", content: currentInput },
     ]);
 
-    await executeCommand(input);
-
-    setInput("");
+    await executeCommand(currentInput);
   };
 
   return (
