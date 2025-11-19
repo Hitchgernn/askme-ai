@@ -122,57 +122,55 @@ export default function MacTerminal() {
   };
 
   return (
-    <div className="container">
-      <div className="mac-terminal">
-        
-        {/* HEADER */}
-        <div className="header">
-          <div className="header__op">
-            <span className="header__op-icon header__op-icon--red"></span>
-            <span className="header__op-icon header__op-icon--yellow"></span>
-            <span className="header__op-icon header__op-icon--green"></span>
-          </div>
-
-          <div className="header__title">
-            root@desktop:~/askhitchgernn
-          </div>
-
-          <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "Dark" : "Light"} Mode
-          </button>
+    <div className="mac-terminal">
+      
+      {/* HEADER */}
+      <div className="header">
+        <div className="header__op">
+          <span className="header__op-icon header__op-icon--red"></span>
+          <span className="header__op-icon header__op-icon--yellow"></span>
+          <span className="header__op-icon header__op-icon--green"></span>
         </div>
 
-        {/* BODY */}
-        <div ref={terminalRef} className="body">
-          {rows.map((row, i) => (
-            <div className="body__row" key={i}>
-              {row.username ? (
-                <span className="prompt-line">
-                  <span className="prompt-username">{row.username}</span>{" "}
-                  {row.content}
-                </span>
-              ) : (
-                <pre className="body__row-result">{row.content}</pre>
-              )}
-            </div>
-          ))}
+        <div className="header__title">
+          root@desktop:~/askhitchgernn
         </div>
 
-        {/* INPUT */}
-        <form onSubmit={handleSubmit} className="command-bar">
-          <span className="body__row-folder">user:~$</span>
-
-          <div className="input-wrapper">
-            <input
-              autoFocus
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="terminal-input"
-            />
-          </div>
-        </form>
-
+        <button onClick={toggleTheme} className="theme-toggle">
+          {theme === "light" ? "Dark" : "Light"} Mode
+        </button>
       </div>
+
+      {/* BODY */}
+      <div ref={terminalRef} className="body">
+        {rows.map((row, i) => (
+          <div className="body__row" key={i}>
+            {row.username ? (
+              <span className="prompt-line">
+                <span className="prompt-username">{row.username}</span>{" "}
+                {row.content}
+              </span>
+            ) : (
+              <pre className="body__row-result">{row.content}</pre>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* INPUT */}
+      <form onSubmit={handleSubmit} className="command-bar">
+        <span className="body__row-folder">user:~$</span>
+
+        <div className="input-wrapper">
+          <input
+            autoFocus
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="terminal-input"
+          />
+        </div>
+      </form>
+
     </div>
   );
 }

@@ -60,20 +60,20 @@ body {
 /* ============================================================
    LAYOUT / TERMINAL CONTAINER
 ============================================================ */
-.container {
-  padding: 2.5rem 2rem;
-}
-
 .mac-terminal {
   background-color: var(--terminal-bg);
   width: 100rem;
   height: 60rem;
-  margin: 0 auto;
   border-radius: 6px;
 
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* ============================================================
