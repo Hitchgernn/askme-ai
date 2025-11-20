@@ -44,8 +44,7 @@ export default function MacTerminal() {
                        %@@@%*******@@********@@@@-                       
                            @*******@+*********                           
                          .@********@-#********+.                         
-                      :::::=======-:::=======::::::                      
-                                                                                                                                                                                      
+                      :::::=======-:::=======::::::                                                                                                                                                                
   _   _ _  ___ _              _   _ _ _       _                                 
  | | | (_) |_ _( )_ __ ___   | | | (_) |_ ___| |__   __ _  ___ _ ___ _ __ _ ___  
  | |_| | |  | ||/| '_ \` _\  | |_| | | __/ __| '_ \ / / _\/  _ \ '__| '_ \| '_ \ 
@@ -57,13 +56,18 @@ export default function MacTerminal() {
   const tips = "Tips:"
   const tipsText1 = "* Type 'help' to see available basic commands";
   const tipsText2 = "* Or type ur questions directly (english better)"
+  const textEnter = `
+  
 
+  
+  `
   useEffect(() => {
     setRows([
       { type: "ascii", username: "", content: welcomeText },
       { type: "tip", username: "", content: tips },
       { type: "tip", username: "", content: tipsText1}, 
       { type: "tip", username: "", content: tipsText2},
+      { type: "tip", username: "", content: textEnter},
     ]);
 
     setTimeout(() => setFirstRender(false), 300);
