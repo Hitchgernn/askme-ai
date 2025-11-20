@@ -13,9 +13,7 @@ export default function MacTerminal() {
   const { theme, toggleTheme } = useTheme();
 
   const welcomeText = String.raw`
-                               
-                                                                         
-                                                                         
+                                 
                       =*  -@                *%   @                       
                      %   -   @.           @.  .-  @                      
                     .- @#%#@:..@:+%@@%#-:*. @###%. @                     
