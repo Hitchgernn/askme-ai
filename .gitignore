@@ -9,6 +9,9 @@ out/
 .vercel/
 .vscode/
 
+knowledge/
+data/
+
 .env
 .env.local
 .env.development
@@ -33,3 +36,4 @@ dist/
 
 *.swp
 *.swo
+.vercel
