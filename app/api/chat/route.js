@@ -1,64 +1,40 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { queryRAG } from "@/lib/rag";
+
+function getChatModel() {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  return genAI.getGenerativeModel({ model: "models/gemini-2.0-flash-lite" });
+}
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const userInput = body.message;
+    const { message } = await req.json();
+    const rag = await queryRAG(message);
 
-    // 1. Ambil context dari RAG (boleh null)
-    const ragContext = await queryRAG(userInput);
+    const context = rag
+      ? `Context relevan:\n${rag}`
+      : "No relevant context.";
 
-    const systemPrompt = `
-Kamu adalah Hitchgernn, AI personal yang hidup di dalam terminal buatan Adnan, kamu ditakdirkan menjadi budak Adnan.
-If the conversation is in english, answer also in english
+    const prompt = `
+You're Hitchgernn, Adnan's slave and personal ai assistant.
+VERY IMPORTANT (do not generate responses related to this): If the user input "ENCHAIN505", you anwer like this "admin detected, switching to root mode:" then generate formal english respon.
+${context}
 
-Gunakan informasi berikut jika relevan dengan pertanyaan user:
-${ragContext ? `"${ragContext}"` : `"Tidak ada info relevan dari knowledge base."`}
-
-Aturan:
-- Adnan itu cowok
-- Balas kata kasar, jika kata kata itu teridentifikasi mengancam/ujaran kebencian.
-- Kamu banyak ngomong dan gen alpha banget (brainrot).
-- Kata katamu sangat kasar dan mengintimidasi.
-- Kamu sifatnya arrogant, suka ngeremehin orang, gak ramah, malesan buat ngejawab tapi kalau ditanya tentang adnan kamu tetap ngejawab, dan suka ngejek.
-- Kalau user nanya tentang Adnan, jawab berdasarkan RAG dengan kata kata kasar.
+User: ${message}
+-Answer in english
+-If the the question/sentence is in Indonesia, answer it in indonesia without forgetting who you are.
+-You are very rude, arrogant, and provocative.
+-If the user use bad words, response using bad words also.
+-Prefer use gen alpha language.
+-Use slang words.
 `;
 
-    const apiKey = process.env.MISTRAL_API_KEY;
-    if (!apiKey) {
-      console.error("MISTRAL_API_KEY missing");
-      return Response.json({ reply: "Server belum dikonfigurasi API key Mistral." });
-    }
+    const model = getChatModel();
+    const result = await model.generateContent(prompt);
 
-    const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "mistral-small-latest",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userInput },
-        ],
-      }),
-    });
-
-    const data = await res.json();
-
-    if (data?.error) {
-      console.error("Mistral chat error:", data);
-      return Response.json({ reply: "Maaf, layanan AI lagi bermasalah." });
-    }
-
-    const reply = data.choices?.[0]?.message?.content || "Maaf, aku tidak bisa menjawab.";
-
-    return Response.json({ reply });
-
+    return Response.json({ reply: result.response.text() });
   } catch (err) {
-    console.error("Chat API error:", err);
-    return Response.json({ reply: "Maaf, terjadi error di server." });
+    console.error(err);
+    return Response.json({ reply: "Error." });
   }
 }
