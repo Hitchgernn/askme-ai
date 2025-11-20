@@ -6,6 +6,14 @@ function getChatModel() {
   return genAI.getGenerativeModel({ model: "models/gemini-2.0-flash-lite" });
 }
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { queryRAG } from "@/lib/rag";
+
+function getChatModel() {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  return genAI.getGenerativeModel({ model: "models/gemini-2.0-flash-lite" });
+}
+
 export async function POST(req) {
   try {
     const { message } = await req.json();
