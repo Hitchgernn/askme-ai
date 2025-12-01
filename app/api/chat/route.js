@@ -6,7 +6,19 @@ function getChatModel() {
   return genAI.getGenerativeModel({ model: "models/gemini-2.0-flash-lite" });
 }
 
+const rateLimit = new Map();
+
 export async function POST(req) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  const now = Date.now();
+
+  if (rateLimit.has(ip)) {
+    const lastRequest = rateLimit.get(ip);
+    if (now - lastRequest < 2000) { // 2 seconds limit
+      return Response.json({ reply: "Too many requests. Please wait a moment." }, { status: 429 });
+    }
+  }
+  rateLimit.set(ip, now);
   try {
     const { message } = await req.json();
     const rag = await queryRAG(message);

@@ -58,8 +58,6 @@ export default function MacTerminal() {
   const tipsText2 = "* Or type ur questions directly (english better)"
   const textEnter = `
   
-
-  
   `
   useEffect(() => {
     setRows([
