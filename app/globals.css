@@ -1,18 +1,9 @@
-/* ============================================================
-   GOOGLE FONT
-============================================================ */
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap");
 
-/* ============================================================
-   TAILWIND
-============================================================ */
 @import "tailwindcss";
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
-/* ============================================================
-   THEME VARIABLES
-============================================================ */
 :root {
   --background: #404040;
   --foreground: #ededed;
@@ -39,9 +30,6 @@
   --cursor-color: #000;
 }
 
-/* ============================================================
-   GLOBAL RESET
-============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -57,9 +45,6 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* ============================================================
-   LAYOUT / TERMINAL CONTAINER
-============================================================ */
 .mac-terminal {
   background-color: var(--terminal-bg);
   width: 100rem;
@@ -76,9 +61,6 @@ body {
   transform: translate(-50%, -50%);
 }
 
-/* ============================================================
-   HEADER (TRAFFIC LIGHTS)
-============================================================ */
 .header {
   height: 4rem;
   padding: 0 1.4rem;
@@ -121,18 +103,12 @@ body {
   color: var(--header-title);
 }
 
-/* ============================================================
-   TERMINAL BODY
-============================================================ */
 .body {
   flex: 1;
   overflow-y: auto;
   font-size: 1.3rem;
 }
 
-/* ============================================================
-   TERMINAL ROWS (THE FIX)
-============================================================ */
 .body__row {
   display: grid !important;
   grid-template-columns: auto 1fr !important;
@@ -164,9 +140,6 @@ body {
   color: var(--folder-color);
 }
 
-/* ============================================================
-   COMMAND BAR
-============================================================ */
 .command-bar {
   display: flex;
   align-items: center;

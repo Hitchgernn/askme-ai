@@ -7,7 +7,6 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("dark");
 
-  // Load theme from localStorage or system preference
   useEffect(() => {
     const saved = localStorage.getItem("theme");
 
@@ -16,18 +15,15 @@ export function ThemeProvider({ children }) {
       return;
     }
 
-    // fallback: follow system
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     setTheme(prefersDark ? "dark" : "light");
   }, []);
 
-  // Apply theme to <html>
   useEffect(() => {
     if (!theme) return;
 
     const html = document.documentElement;
 
-    // remove both attributes first to avoid stacking
     html.removeAttribute("data-theme");
     html.setAttribute("data-theme", theme);
 

@@ -13,38 +13,7 @@ export default function MacTerminal() {
   const { theme, toggleTheme } = useTheme();
 
   const welcomeText = String.raw`
-                                 
-                      =*  -@                *%   @                       
-                     %   -   @.           @.  .-  @                      
-                    .- @#%#@:..@:+%@@%#-:*. @###%. @                     
-                    @ ##%%%@#              -@@%%#@ :.                    
-                   .=.@#@                      *@#=.@                    
-               @-:@%.-%  -.                   ::  @.@:=.@                
-                @@ @@ @%%%%%@ ............ =#####@:==:@@.                
-                @#:%.@%%###**@%   .....  .@*####%%%@ %@@                 
-               .@-@ @%%##*******%%%@@%%%%#########%%@ *@@                
-              @  @ @%%***+:::::+********#=----+####%%-%  %               
-              %  @-%*****-:....-***#####*:...--*###%%@ # .%              
-              @..=@*#****-:....-########*:...--*####%@.@..%              
-              .@ *%##****=--..-=##+---##*-:.---#####%@.@.@               
-                 @.%######*---*#-*+-==***#+--+######%@:.                 
-                 .=.@##############################%@.@                  
-                  .#..#@#########%@@@@@#########@@...@                   
-                    #*......:+.           =-.......@                     
-                       #@-.......      ........%@.                       
-                           +%%%@@@@@@@@@@%%%@                            
-                          *=       ..     #  @                           
-                         @  ..  %**@@%*@   %  .#                         
-                       -=  .@  @*@-...-%@   ..  @                        
-                      @@@=.:   @#%:...-@%   @.:%@@#                      
-                     @+****@    @*@#*@#%-   -*****+.                     
-                     @*****@   -@******#@   .%******                     
-                     @  : +%@@%**********#@@#@    .-                     
-                     %   @@#***@%#*****#@%***@@%  @                      
-                       %@@@%*******@@********@@@@-                       
-                           @*******@+*********                           
-                         .@********@-#********+.                         
-                      :::::=======-:::=======::::::                                                                                                                                                                
+                                                                                                                                                                                       
   _   _ _  ___ _              _   _ _ _       _                                 
  | | | (_) |_ _( )_ __ ___   | | | (_) |_ ___| |__   __ _  ___ _ ___ _ __ _ ___  
  | |_| | |  | ||/| '_ \` _\  | |_| | | __/ __| '_ \ / / _\/  _ \ '__| '_ \| '_ \ 
@@ -55,7 +24,7 @@ export default function MacTerminal() {
   `;
   const tips = "Tips:"
   const tipsText1 = "* Type 'help' to see available basic commands";
-  const tipsText2 = "* Or type ur questions directly (english better)"
+  const tipsText2 = "* Or type ur questions directly"
   const textEnter = `
   
   `
@@ -65,13 +34,12 @@ export default function MacTerminal() {
       { type: "tip", username: "", content: tips },
       { type: "tip", username: "", content: tipsText1}, 
       { type: "tip", username: "", content: tipsText2},
-      { type: "tip", username: "", content: textEnter},
+      // { type: "tip", username: "", content: textEnter},
     ]);
 
     setTimeout(() => setFirstRender(false), 300);
   }, []);
 
-  // === AUTO SCROLL ===
   useEffect(() => {
     if (firstRender) return;
     terminalRef.current?.scrollTo({
@@ -80,11 +48,9 @@ export default function MacTerminal() {
     });
   }, [rows, firstRender]);
 
-  // === COMMAND HANDLER ===
   const executeCommand = async (text) => {
     const cmd = text.trim();
 
-    // === CHECK LOCAL COMMANDS FIRST ===
     if (commands[cmd]) {
       const result = commands[cmd]();
 
@@ -106,7 +72,6 @@ export default function MacTerminal() {
       return;
     }
 
-    // === FETCH AI RESPONSE ===
     const res = await fetch("/api/chat", {
       method: "POST",
       body: JSON.stringify({ message: text }),
@@ -115,7 +80,6 @@ export default function MacTerminal() {
     const data = await res.json();
     const fullText = data.reply;
 
-    // === PREPARE EMPTY ROW FOR TYPING ===
     const aiRowIndex = rows.length + 1; 
 
     setRows((prev) => [
@@ -127,11 +91,10 @@ export default function MacTerminal() {
       },
     ]);
 
-    // === TYPING ANIMATION ===
     const chars = fullText.split("");
 
     for (let i = 0; i < chars.length; i++) {
-      await wait(8); // speed: lower => faster typing
+      await wait(8); // speed: lower -> faster typing
 
       setRows((prev) => {
         const updated = [...prev];
@@ -142,7 +105,6 @@ export default function MacTerminal() {
   };
 
 
-  // === SUBMIT INPUT ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
