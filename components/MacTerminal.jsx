@@ -34,7 +34,7 @@ export default function MacTerminal() {
       { type: "tip", username: "", content: tips },
       { type: "tip", username: "", content: tipsText1}, 
       { type: "tip", username: "", content: tipsText2},
-      // { type: "tip", username: "", content: textEnter},
+      { type: "tip", username: "", content: textEnter},
     ]);
 
     setTimeout(() => setFirstRender(false), 300);
