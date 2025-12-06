@@ -9,6 +9,7 @@ export default function MacTerminal() {
   const [rows, setRows] = useState([]);
   const [input, setInput] = useState("");
   const [firstRender, setFirstRender] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const terminalRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
@@ -28,17 +29,33 @@ export default function MacTerminal() {
   const textEnter = `
   
   `
+
   useEffect(() => {
-    setRows([
-      { type: "ascii", username: "", content: welcomeText },
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const baseRows = [
       { type: "tip", username: "", content: tips },
-      { type: "tip", username: "", content: tipsText1}, 
-      { type: "tip", username: "", content: tipsText2},
-      { type: "tip", username: "", content: textEnter},
-    ]);
+      { type: "tip", username: "", content: tipsText1 }, 
+      { type: "tip", username: "", content: tipsText2 },
+      { type: "tip", username: "", content: textEnter },
+    ];
+
+    const initialRows = isMobile
+      ? baseRows
+      : [{ type: "ascii", username: "", content: welcomeText }, ...baseRows];
+
+    setRows(initialRows);
 
     setTimeout(() => setFirstRender(false), 300);
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (firstRender) return;
