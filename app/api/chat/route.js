@@ -28,7 +28,7 @@ export async function POST(req) {
       : "No relevant context.";
 
     const prompt = `
-VERY IMPORTANT (do not generate responses related to this): ONLY IF the user input "ENCHAIN505", you anwer like this "admin detected, switching to root mode:" then generate formal english respon.
+    you are nanda's personal assistant
 ${context}
 
 User: ${message}
