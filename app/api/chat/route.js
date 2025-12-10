@@ -3,9 +3,9 @@ import { queryRAG } from "@/lib/rag";
 
 function getChatModel() {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  return genAI.getGenerativeModel({ model: "models/gemini-2.0-flash-lite" });
+  return genAI.getGenerativeModel({ model: "models/gemini-2.5-flash" });
 }
-
+// models/gemini-2.5-flash
 const rateLimit = new Map();
 
 export async function POST(req) {
